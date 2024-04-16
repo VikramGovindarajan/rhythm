@@ -9,7 +9,7 @@ from tinytag import TinyTag
 # Pass the filename into the
 # Tinytag.get() method and store
 # the result in audio variable
-audio = TinyTag.get("GeeksForGeeks_Audio.m4a")
+audio = TinyTag.get("SarangaDariya.mp3")
   
 # Use the attributes
 # and Display
