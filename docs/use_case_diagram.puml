@@ -1,0 +1,24 @@
+@startuml
+' Define Actors
+actor "User" as U
+actor "Developer" as D
+
+' Define System Boundary
+rectangle "Rhythm Music Player" {
+    ' User Actions
+    U -- (Scan MP3 Files)
+    U -- (Extract Metadata)
+    U -- (List Songs)
+    U -- (Search by Genre)
+    U -- (Play Song)
+
+    ' Developer Actions
+    D -- (Import as Module)
+    D -- (Extend Functionality)
+}
+
+' Relationships (Optional)
+(Extract Metadata) .> (Scan MP3 Files) : "Requires"
+(List Songs) .> (Extract Metadata) : "Uses"
+(Play Song) .> (List Songs) : "From Collection"
+@enduml
