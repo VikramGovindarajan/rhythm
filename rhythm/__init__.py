@@ -1,3 +1,4 @@
-from rhythm.main import *
+from rhythm.main import MusicCollection, Song, load_collection
 
-__version__ = '0.1'
+__all__ = ["MusicCollection", "Song", "load_collection"]
+__version__ = "0.1"
