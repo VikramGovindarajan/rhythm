@@ -49,7 +49,11 @@ class MusicCollection:
         self.songs.clear()
         rows = self.db.fetch_all_songs()
         for r in rows:
-            self.songs.append(Song(*r))
+            path, title, artists_str, album, genre, year = r
+            song = Song(path=path, title=title, album=album, genre=genre, year=year)
+            # attach artists as list
+            song.artists = artists_str.split(", ") if artists_str else []
+            self.songs.append(song)
 
     def filter(self, **kwargs):
         rows = self.db.filter_songs(**kwargs)
