@@ -12,6 +12,25 @@ class Song:
         self.genre = genre
         self.year = year
 
+    def update_metadata(self, title=None, album=None, genre=None, year=None):
+            """Update MP3 tags and internal object"""
+            audio = MP3(self.path, ID3=EasyID3)
+
+            if title:
+                audio['title'] = title
+                self.title = title
+            if album:
+                audio['album'] = album
+                self.album = album
+            if genre:
+                audio['genre'] = genre
+                self.genre = genre
+            if year:
+                audio['date'] = str(year)
+                self.year = year
+
+            audio.save()
+
     def __repr__(self):
         return f"<Song: {self.title or 'Unknown'} - {self.artist or 'Unknown'}>"
 
@@ -62,5 +81,11 @@ class MusicCollection:
     def __repr__(self):
         return f"<MusicCollection: {len(self.songs)} songs>"
 
+    def edit_song(self, song, title=None, album=None, genre=None, year=None):
+        """Update song metadata (both file and DB)"""
+        song.update_metadata(title=title, album=album, genre=genre, year=year)
+        self.db.update_song(song)
+
 def load_collection(directory="."):
     return MusicCollection(directory)
+

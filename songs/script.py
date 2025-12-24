@@ -53,3 +53,14 @@ print(rock_15)
 
 coll.filter(artist="Some Unknown Artist")
 
+# Editing
+# Pick first song for demo
+song = coll.songs[0]
+print("Before edit:", song)
+
+# Update genre and album
+coll.edit_song(song, genre="Party", title="Bole Chudiyan")
+
+# Reload collection from DB to verify
+coll.load_from_db()
+print("After edit:", coll.songs[0])

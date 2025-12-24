@@ -154,3 +154,21 @@ class RhythmDB:
             raise RuntimeError(f"Album insert/select failed: {name}, {year}")
 
         return row[0]
+
+    def update_song(self, song):
+        """Update DB to match Song object's metadata"""
+        cur = self.conn.cursor()
+        
+        # Update album table first (if album changed)
+        cur.execute("INSERT OR IGNORE INTO Album(name, year) VALUES (?, ?)", (song.album, song.year))
+        cur.execute("SELECT id FROM Album WHERE name = ? AND year = ?", (song.album, song.year))
+        album_id = cur.fetchone()[0]
+
+        # Update song table
+        cur.execute("""
+            UPDATE Song
+            SET title = ?, album_id = ?, genre = ?
+            WHERE path = ?
+        """, (song.title, album_id, song.genre, song.path))
+
+        self.conn.commit()
