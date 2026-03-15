@@ -1,4 +1,5 @@
 import sqlite3
+from pathlib import Path
 
 class RhythmDB:
     def __init__(self, db_path="rhythm.db"):
@@ -6,45 +7,12 @@ class RhythmDB:
         self.create_tables()
 
     def create_tables(self):
-        cur = self.conn.cursor()
-        cur.execute("""
-        CREATE TABLE IF NOT EXISTS Artist (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT UNIQUE
-        )
-        """)
+        schema_path = Path(__file__).resolve().parent.parent / "schema.sql"
 
-        cur.execute("""
-        CREATE TABLE IF NOT EXISTS Album (
-          id INTEGER PRIMARY KEY,
-          name TEXT NOT NULL,
-          year INTEGER NOT NULL,
-          UNIQUE(name, year)
-        );
+        with open(schema_path, "r") as f:
+            schema_sql = f.read()
 
-        """)
-
-        cur.execute("""
-        CREATE TABLE IF NOT EXISTS Song (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            path TEXT UNIQUE,
-            title TEXT,
-            album_id INTEGER,
-            genre TEXT,
-            FOREIGN KEY(album_id) REFERENCES Album(id)
-        )
-        """)
-
-        cur.execute("""
-        CREATE TABLE IF NOT EXISTS SongArtist (
-            song_id INTEGER,
-            artist_id INTEGER,
-            PRIMARY KEY (song_id, artist_id),
-            FOREIGN KEY(song_id) REFERENCES Song(id),
-            FOREIGN KEY(artist_id) REFERENCES Artist(id)
-        )
-        """)
-
+        self.conn.executescript(schema_sql)
         self.conn.commit()
 
     def insert_song(self, song):
