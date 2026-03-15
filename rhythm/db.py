@@ -2,7 +2,7 @@ import sqlite3
 from pathlib import Path
 
 class RhythmDB:
-    def __init__(self, db_path="rhythm.db"):
+    def __init__(self, db_path):
         self.conn = sqlite3.connect(db_path)
         self.create_tables()
 
